@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+
+<html>
+        <!-- loading the minified version using unpkg -->
+<script src="https://unpkg.com/ipfs/dist/index.min.js"></script>
+
+<!-- loading the human-readable (not minified) version using unpkg -->
+<script src="https://unpkg.com/ipfs/dist/index.js"></script>
+    <!-- loading the minified version using jsDelivr -->
+<script src="https://cdn.jsdelivr.net/npm/ipfs/dist/index.min.js"></script>
+    <script>
+        async function main () {
+            
+          const node = await window.Ipfs.create({
+              EXPERIMENTAL: {
+    pubsub: true
+  },
+  config: {
+    Addresses: {
+      Swarm: [
+        '/dns4/ws-star.discovery.libp2p.io/tcp/443/wss/p2p-websocket-star'
+      ]
+    }
+  }
+          })
+          const receiveMsg = (msg) => console.log(msg.data.toString())
+          node.pubsub.subscribe('aidan', receiveMsg)
+          
+          node.pubsub.peers('aidan', (err, peerIds) => {
+              if (err) {
+                  return console.error('failed to find peers', err)
+              }
+              console.log(peerIds)
+          })
+        }
+        main()
+        </script>
+</html>
